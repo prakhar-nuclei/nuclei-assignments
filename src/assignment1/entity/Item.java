@@ -7,9 +7,9 @@ public class Item {
     private final String name;
     private final BigDecimal price;
     private final int quantity;
-    private final String type;
+    private final ItemType type;
 
-    public Item(String name, BigDecimal price, int quantity, String type) {
+    public Item(String name, BigDecimal price, int quantity, ItemType type) {
         this.name = name;
         this.price = price;
         this.quantity = quantity;
@@ -28,7 +28,11 @@ public class Item {
         return quantity;
     }
 
-    public String getType() {
+    public BigDecimal getTotalPrice() {
+        return price.multiply(BigDecimal.valueOf(quantity));
+    }
+
+    public ItemType getType() {
         return type;
     }
 }

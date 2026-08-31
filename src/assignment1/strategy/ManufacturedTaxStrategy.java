@@ -1,21 +1,26 @@
 package assignment1.strategy;
 
+import assignment1.constants.TaxConstants;
 import assignment1.entity.Item;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class ManufacturedTaxStrategy implements TaxStrategy {
 
     @Override
     public BigDecimal calculateTax(Item item) {
 
-        BigDecimal baseTax = item.getPrice()
-                .multiply(new BigDecimal("0.125"));
+        BigDecimal totalPrice = item.getTotalPrice();    // Quantity
 
-        BigDecimal additionalTax = item.getPrice()
+        BigDecimal baseTax = totalPrice
+                .multiply(TaxConstants.BASE_TAX_RATE);
+
+        BigDecimal additionalTax = totalPrice
                 .add(baseTax)
-                .multiply(new BigDecimal("0.02"));
+                .multiply(TaxConstants.MANUFACTURED_TAX_RATE); // constants
 
-        return baseTax.add(additionalTax);
+        return baseTax.add(additionalTax)
+                .setScale(TaxConstants.SCALE, RoundingMode.HALF_UP);
     }
 }

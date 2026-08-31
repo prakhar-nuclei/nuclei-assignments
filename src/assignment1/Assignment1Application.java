@@ -2,6 +2,8 @@ package assignment1;
 
 import assignment1.entity.Item;
 import assignment1.entity.ItemResult;
+import assignment1.exception.ParseException;
+import assignment1.exception.ValidationException;
 import assignment1.parser.InputParser;
 import assignment1.service.TaxCalculatorService;
 import assignment1.validation.InputValidation;
@@ -17,67 +19,82 @@ public class Assignment1Application {
         TaxCalculatorService taxCalculatorService =
                 new TaxCalculatorService();
 
-        Scanner scanner = new Scanner(System.in);
+        try (Scanner scanner = new Scanner(System.in)) {
 
-        boolean addAnotherItem;
+            boolean addAnotherItem;
 
-        do {
-            try {
-                System.out.println(
-                        "Enter item details (-name <name> -price <price> " +
-                                "-quantity <quantity> -type <type>):"
-                );
+            do {
+                try {
+                    System.out.println(
+                            "Enter item details (-name <name> -price <price> " +
+                                    "-quantity <quantity> -type <type>):"
+                    );
 
-                String input = scanner.nextLine();
+                    String input = scanner.nextLine();
 
-                String[] inputArguments = input.trim().split("\\s+");
+                    if (input.isBlank()) {
+                        throw new ParseException("Input cannot be blank.");
+                    }
 
-                Item item = parser.parse(inputArguments);
+                    String[] inputArguments = input.trim().split("\\s+");
 
-                validation.validate(item);
+                    Item item = parser.parse(inputArguments);
 
-                ItemResult result = taxCalculatorService.calculate(item);
+                    validation.validate(item);
 
-                System.out.println("\nItem Name: " +
-                        result.getItem().getName());
+                    ItemResult result = taxCalculatorService.calculate(item);
 
-                System.out.println("Item Price: " +
-                        result.getItem().getPrice());
+                    System.out.println("\nItem Name: " +
+                            result.getItem().getName());
 
-                System.out.println("Sales Tax: " +
-                        result.getTax());
+                    System.out.println("Item Price: " +
+                            result.getItem().getTotalPrice());
 
-                System.out.println("Final Price: " +
-                        result.getFinalPrice());
+                    System.out.println("Sales Tax: " +
+                            result.getTax());
 
-            } catch (IllegalArgumentException exception) {
-                System.out.println(
-                        "Error: " + exception.getMessage()
-                );
-            }
+                    System.out.println("Final Price: " +
+                            result.getFinalPrice());
 
-            while (true) {
-                System.out.print(
-                        "\nDo you want to enter details of any other item (y/n): "
-                );
+                } catch (ParseException exception) {
+                    System.out.println(
+                            "Error: " + exception.getMessage()
+                    );
+                } catch (ValidationException exception) {
 
-                String choice = scanner.nextLine().trim();
+                    System.out.println(
+                            "Error: " + exception.getMessage()
+                    );
 
-                if (choice.equalsIgnoreCase("y")) {
-                    addAnotherItem = true;
-                    break;
+                } catch (Exception exception) {
+
+                    System.out.println(
+                            "An unexpected error occurred."
+                    );
                 }
 
-                if (choice.equalsIgnoreCase("n")) {
-                    addAnotherItem = false;
-                    break;
+                while (true) {
+                    System.out.print(
+                            "\nDo you want to enter details of any other item (y/n): "
+                    );
+
+                    String choice = scanner.nextLine().trim();
+
+                    if (choice.equalsIgnoreCase("y")) {
+                        addAnotherItem = true;
+                        break;
+                    }
+
+                    if (choice.equalsIgnoreCase("n")) {
+                        addAnotherItem = false;
+                        break;
+                    }
+
+                    System.out.println("Invalid input. Please enter only y or n.");
                 }
 
-                System.out.println("Invalid input. Please enter only y or n.");
-            }
+            } while (addAnotherItem);
 
-        } while (addAnotherItem);
-
-        scanner.close();
+        }
     }
 }
