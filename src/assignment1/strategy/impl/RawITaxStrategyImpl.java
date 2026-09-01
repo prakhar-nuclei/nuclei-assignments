@@ -1,12 +1,13 @@
-package assignment1.strategy;
+package assignment1.strategy.impl;
 
 import assignment1.constants.TaxConstants;
 import assignment1.entity.Item;
+import assignment1.strategy.ITaxStrategy;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-public class RawTaxStrategy implements TaxStrategy {
+public class RawITaxStrategyImpl implements ITaxStrategy {
 
     @Override
     public BigDecimal calculateTax(Item item) {

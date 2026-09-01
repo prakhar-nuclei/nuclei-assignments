@@ -69,7 +69,7 @@ public class Assignment1Application {
                 } catch (Exception exception) {
 
                     System.out.println(
-                            "An unexpected error occurred."
+                            "An unexpected error occurred. " + exception.getMessage()
                     );
                 }
 

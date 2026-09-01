@@ -2,7 +2,7 @@ package assignment1.parser;
 
 import assignment1.constants.InputConstants;
 import assignment1.entity.Item;
-import assignment1.entity.ItemType;
+import assignment1.enums.ItemTypeEnum;
 import assignment1.exception.ParseException;
 
 import java.math.BigDecimal;
@@ -105,13 +105,13 @@ public class InputParser {
 
         BigDecimal parsedPrice;
         int parsedQuantity;
-        ItemType parsedType;
+        ItemTypeEnum parsedType;
 
         try {
             parsedPrice = new BigDecimal(price);
             parsedQuantity = Integer.parseInt(quantity);
 
-            parsedType = ItemType.valueOf(type.toUpperCase());
+            parsedType = ItemTypeEnum.valueOf(type.toUpperCase());
 
         } catch (NumberFormatException exception) {
 

@@ -4,7 +4,7 @@ import assignment1.entity.Item;
 
 import java.math.BigDecimal;
 
-public interface TaxStrategy {
+public interface ITaxStrategy {
 
     BigDecimal calculateTax(Item item);
 }

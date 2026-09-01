@@ -1,5 +1,7 @@
 package assignment1.entity;
 
+import assignment1.enums.ItemTypeEnum;
+
 import java.math.BigDecimal;
 
 public class Item {
@@ -7,9 +9,9 @@ public class Item {
     private final String name;
     private final BigDecimal price;
     private final int quantity;
-    private final ItemType type;
+    private final ItemTypeEnum type;
 
-    public Item(String name, BigDecimal price, int quantity, ItemType type) {
+    public Item(String name, BigDecimal price, int quantity, ItemTypeEnum type) {
         this.name = name;
         this.price = price;
         this.quantity = quantity;
@@ -32,7 +34,7 @@ public class Item {
         return price.multiply(BigDecimal.valueOf(quantity));
     }
 
-    public ItemType getType() {
+    public ItemTypeEnum getType() {
         return type;
     }
 }

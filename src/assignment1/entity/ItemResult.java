@@ -8,7 +8,7 @@ public class ItemResult {
     private final BigDecimal tax;
     private final BigDecimal finalPrice;
 
-    public ItemResult(Item item, BigDecimal tax, BigDecimal finalPrice) {
+    public ItemResult(final Item item, final BigDecimal tax, final BigDecimal finalPrice) {
         this.item = item;
         this.tax = tax;
         this.finalPrice = finalPrice;
