@@ -1,45 +1,61 @@
 package com.nuclei.assignment2.controller;
 
-import com.nuclei.assignment2.dto.StudentDto;
+import com.nuclei.assignment2.dto.StudentRequestDto;
+import com.nuclei.assignment2.dto.StudentResponseDto;
 import com.nuclei.assignment2.enums.SortDirectionEnum;
 import com.nuclei.assignment2.enums.SortFeildEnum;
-import com.nuclei.assignment2.service.StudentService;
+import com.nuclei.assignment2.service.IStudentService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/students")
+@RequestMapping("/v1/students")
 public class StudentController {
 
-    private final StudentService studentService;
+    private final IStudentService studentService;
 
-    public StudentController(final StudentService studentService) {
+    public StudentController( final IStudentService studentService) {
         this.studentService = studentService;
     }
 
+
     @PostMapping(
-            path = "",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public StudentDto addStudent(@Valid @RequestBody StudentDto studentDto) {
+    public ResponseEntity<StudentResponseDto> addStudent(@Valid @RequestBody StudentRequestDto studentRequestDto) {
 
 
-       return studentService.addStudent(studentDto);
+        final StudentResponseDto studentResponseDto =
+                studentService.addStudent(studentRequestDto);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(studentResponseDto);
     }
 
     @GetMapping(
-            path = "",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public List<StudentDto> getAllStudents(
-            @RequestParam SortFeildEnum sortFeild,
-            @RequestParam SortDirectionEnum sortDirection
+    public ResponseEntity<List<StudentResponseDto>> getAllStudents(
+            @RequestParam(defaultValue = "NAME")
+            final SortFeildEnum sortFeild,
+
+            @RequestParam(defaultValue = "ASC")
+            final SortDirectionEnum sortDirection
     ) {
-        return studentService.getAllStudents(sortFeild, sortDirection);
+        final List<StudentResponseDto> students =
+                studentService.getAllStudents(
+                        sortFeild,
+                        sortDirection
+                );
+
+        return ResponseEntity.ok(students);
     }
 
 }

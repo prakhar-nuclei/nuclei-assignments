@@ -6,12 +6,13 @@ import lombok.*;
 
 import java.util.Set;
 
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class StudentDto {
+public class StudentRequestDto {
 
     @NotBlank(message = "Full name is mandatory.")
     private String fullName;
