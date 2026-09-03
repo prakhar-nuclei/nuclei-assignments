@@ -1,47 +1,59 @@
 package com.nuclei.assignment2.storage;
 
+import com.nuclei.assignment2.exception.StudentNotFoundException;
 import com.nuclei.assignment2.model.Student;
 import org.springframework.stereotype.Component;
-
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 @Component
 public class StudentStorage {
 
     private final Set<Student> students = new TreeSet<>();
 
-    private final Map<Integer, Student> studentsByRollNumber = new HashMap<>();
 
     public void addStudent(Student student) {
 
         students.add(student);
 
-        studentsByRollNumber.put(
-                student.getRollNumber(),
-                student
-        );
     }
 
     public Student findByRollNumber(Integer rollNumber) {
 
-        return studentsByRollNumber.get(rollNumber);
+        return students.stream()
+                .filter(student ->
+                        student.getRollNumber().equals(rollNumber)
+                )
+                .findFirst()
+                .orElseThrow(() ->
+                        new StudentNotFoundException(
+                                "Student with roll number "
+                                        + rollNumber
+                                        + " does not exist."
+                        )
+                );
+    }
+
+    public boolean existsByRollNumber(Integer rollNumber) {
+
+        return students.stream()
+                .anyMatch(student ->
+                        student.getRollNumber().equals(rollNumber)
+                );
     }
 
     public Student deleteByRollNumber(Integer rollNumber) {
 
-        Student student = studentsByRollNumber.remove(rollNumber);
-
-        if (student != null) {
-            students.remove(student);
-        }
+        Student student = findByRollNumber(rollNumber);
+        students.remove(student);
 
         return student;
     }
 
     public Set<Student> getAllStudents() {
-        return new TreeSet<>(students);              // copy return ki taaki andr wala safe reh sake
+        return students.stream()
+                .map(Student::new)
+                .collect(Collectors.toCollection(TreeSet::new));             // deep copy return ki taaki andr wala safe reh sake
     }
 }

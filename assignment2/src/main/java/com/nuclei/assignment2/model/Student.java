@@ -2,11 +2,16 @@ package com.nuclei.assignment2.model;
 
 import com.nuclei.assignment2.enums.CourseEnum;
 import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Builder
+@AllArgsConstructor
+@Getter
 public class Student implements Comparable<Student> {
 
     @NotBlank(message = "Full name is mandatory.")
@@ -31,38 +36,12 @@ public class Student implements Comparable<Student> {
     )
     private Set<CourseEnum> courses;
 
-    public Student(
-            String fullName,
-            Integer age,
-            String address,
-            Integer rollNumber,
-            Set<CourseEnum> courses
-    ) {
-        this.fullName = fullName;
-        this.age = age;
-        this.address = address;
-        this.rollNumber = rollNumber;
-        this.courses = courses;
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public Integer getAge() {
-        return age;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public Integer getRollNumber() {
-        return rollNumber;
-    }
-
-    public Set<CourseEnum> getCourses() {
-        return courses;
+    public Student(Student student) {
+        this.fullName = student.fullName;
+        this.age = student.age;                      //copy constructor
+        this.address = student.address;
+        this.rollNumber = student.rollNumber;
+        this.courses = new HashSet<>(student.courses);
     }
 
     @Override
