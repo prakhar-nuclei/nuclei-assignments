@@ -58,4 +58,22 @@ public class StudentController {
         return ResponseEntity.ok(students);
     }
 
+    @DeleteMapping("/{rollNumber}")
+    public ResponseEntity<Void> deleteStudent(
+            @PathVariable final Integer rollNumber
+    ) {
+
+        studentService.deleteStudent(rollNumber);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/save")
+    public ResponseEntity<Void> saveStudentsToDatabase() {
+
+        studentService.saveStudentsToDatabase();
+
+        return ResponseEntity.noContent().build();
+    }
+
 }
