@@ -5,6 +5,7 @@ import com.nuclei.assignment2.enums.StudentStatusEnum;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
@@ -44,5 +45,25 @@ public class StudentEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private StudentStatusEnum status;
+    @Builder.Default
+    private StudentStatusEnum status = StudentStatusEnum.ACTIVE;
+
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @Column(nullable = false)
+    private LocalDateTime updatedAt;
+
+    @PrePersist
+    public void prePersist() {
+        final LocalDateTime now = LocalDateTime.now();
+
+        this.createdAt = now;
+        this.updatedAt = now;
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
 }

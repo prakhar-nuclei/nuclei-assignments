@@ -81,7 +81,10 @@ public class StudentServiceImpl implements IStudentService {
     @Transactional
     public void deleteStudent(final Integer rollNumber) {
 
-        studentRepository.findByRollNumber(rollNumber)
+        studentRepository.findByRollNumberAndStatus(
+                        rollNumber,
+                        StudentStatusEnum.ACTIVE
+                )
                 .ifPresent(studentEntity -> {
 
                     studentEntity.setStatus(StudentStatusEnum.DELETED);
@@ -105,7 +108,10 @@ public class StudentServiceImpl implements IStudentService {
                         .toList();
 
         final Map<Integer, StudentEntity> existingStudents =
-                studentRepository.findByRollNumberIn(rollNumbers)
+                studentRepository.findByRollNumberInAndStatus(
+                                rollNumbers,
+                                StudentStatusEnum.ACTIVE
+                        )
                         .stream()
                         .collect(Collectors.toMap(
                                 StudentEntity::getRollNumber,
