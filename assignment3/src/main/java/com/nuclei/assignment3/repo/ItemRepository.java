@@ -22,7 +22,7 @@ public class ItemRepository {
 
     private final DataSource dataSource;
 
-    public ItemRepository(DataSource dataSource) {
+    public ItemRepository(final DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
