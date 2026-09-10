@@ -16,7 +16,7 @@ public class ItemRepository {
 
     private static final String FIND_ITEMS_SQL = """ 
              SELECT name, price, quantity, type
-            FROM items
+             FROM items
              ORDER BY id
             """;
 

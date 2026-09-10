@@ -11,7 +11,7 @@ public class Item {
     private final int quantity;
     private final ItemTypeEnum type;
 
-    public Item(String name, BigDecimal price, int quantity, ItemTypeEnum type) {
+    public Item(final String name, final BigDecimal price, final int quantity, final ItemTypeEnum type) {
         this.name = name;
         this.price = price;
         this.quantity = quantity;
