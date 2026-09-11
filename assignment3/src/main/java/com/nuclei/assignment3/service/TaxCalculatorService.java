@@ -8,11 +8,13 @@ import com.nuclei.assignment3.strategy.ITaxStrategy;
 import com.nuclei.assignment3.strategy.impl.ImportedTaxStrategyImpl;
 import com.nuclei.assignment3.strategy.impl.ManufacturedTaxStrategyImpl;
 import com.nuclei.assignment3.strategy.impl.RawTaxStrategyImpl;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Map;
 
+@Service
 public class TaxCalculatorService {
 
     private static final Map<ItemTypeEnum, ITaxStrategy> STRATEGIES = Map.of(
