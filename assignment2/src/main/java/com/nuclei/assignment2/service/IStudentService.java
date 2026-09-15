@@ -17,4 +17,6 @@ public interface IStudentService {
             final SortFeildEnum sortFeild,
             final SortDirectionEnum sortDirection
     );
+    void saveStudentsToDatabase();
+    void deleteStudent(Integer rollNumber);
 }
