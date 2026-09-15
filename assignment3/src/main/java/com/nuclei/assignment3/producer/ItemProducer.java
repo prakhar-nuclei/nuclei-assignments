@@ -1,7 +1,7 @@
 package com.nuclei.assignment3.producer;
 
-import com.nuclei.assignment3.entity.Item;
 import com.nuclei.assignment3.exception.ItemProcessingException;
+import com.nuclei.assignment3.messaging.ItemMessage;
 import com.nuclei.assignment3.repo.ItemRepository;
 import org.springframework.stereotype.Component;
 
@@ -12,13 +12,14 @@ import java.util.concurrent.BlockingQueue;
 public class ItemProducer {
 
     private final ItemRepository itemRepository;
-    private final BlockingQueue<Item> itemQueue;
+    private final BlockingQueue<ItemMessage> itemQueue;
 
     public ItemProducer(
             final ItemRepository itemRepository,
-            final BlockingQueue<Item> itemQueue) {
+            final BlockingQueue<ItemMessage> itemQueue) {
         this.itemRepository = itemRepository;
-        this.itemQueue = itemQueue;
+        this.itemQueue=itemQueue;
+
     }
 
     public void produce() {
@@ -26,7 +27,7 @@ public class ItemProducer {
         try {
             itemRepository.readItems(item -> {
                 try {
-                    itemQueue.put(item);
+                    itemQueue.put(ItemMessage.item(item));
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
 
@@ -37,11 +38,23 @@ public class ItemProducer {
                 }
             });
 
+            itemQueue.put(ItemMessage.poisonPillMessage());
+
         } catch (SQLException e) {
             throw new ItemProcessingException(
                     "Failed to read items from database",
                     e
             );
         }
+
+        catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+
+                throw new ItemProcessingException(
+                        "Item producer thread was interrupted",
+                        e
+                );
+            }
+
     }
 }
